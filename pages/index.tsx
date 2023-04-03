@@ -17,6 +17,7 @@ const Home: React.FC<HomeProps> = ({cars}) => {
         (car) =>
           car.make.toLowerCase().includes(search.toLowerCase()) ||
           car.model.toLowerCase().includes(search.toLowerCase()) ||
+          car.model_year.toLowerCase().includes(search.toLowerCase()) ||
           car.trim.toLowerCase().includes(search.toLowerCase())
       )
     );
