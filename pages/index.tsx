@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {GetStaticProps} from "next";
 import {Card, CardContent, CardMedia, Container, Grid, TextField, Typography,} from '@mui/material';
-import useTranslation from "next-translate/useTranslation";
 
 interface ApiResponse {
   status: string;
@@ -39,8 +38,8 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({cars}) => {
   const [search, setSearch] = useState("");
+  const [car, setCar] = useState<Vehicle | null>(null);
   const router = useRouter();
-  const {t} = useTranslation();
   const [carClickError, setCarClickError] = useState<Record<string, string>>({});
 
   const [filteredCars, setFilteredCars] = useState<Vehicle[]>([]);
@@ -59,7 +58,7 @@ const Home: React.FC<HomeProps> = ({cars}) => {
   }, [search, cars]);
 
   const handleCarClick = useCallback(
-    async (carId) => {
+    async (carId: string) => {
       if (carId) {
         try {
           const response = await fetch(
@@ -76,7 +75,7 @@ const Home: React.FC<HomeProps> = ({cars}) => {
           setCarClickError((prevErrors) => ({...prevErrors, [carId]: ""}));
         } catch (error) {
           console.error(error);
-          setCarClickError((prevErrors) => ({...prevErrors, [carId]: error.message}));
+          setCarClickError((prevErrors) => ({...prevErrors, [carId]: "Error with card, try again later"}));
         }
 
         if (!carClickError[carId]) {
@@ -91,13 +90,13 @@ const Home: React.FC<HomeProps> = ({cars}) => {
   return (
     <Container>
       <Typography variant="h3" gutterBottom>
-        {t('carListing')}
+        Car Listing
       </Typography>
       <TextField
         fullWidth
         margin="normal"
         variant="outlined"
-        placeholder={t('search')}
+        placeholder={"Search by make, model, or trim"}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
