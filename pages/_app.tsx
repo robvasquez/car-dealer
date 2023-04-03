@@ -1,11 +1,17 @@
-import '../styles/globals.css'
-import type {AppProps} from 'next/app'
-import '../styles/tailwind.css';
+import {AppProps} from 'next/app';
+import {useState} from "react";
+import {CarContext} from "../context/CarContext";
+import {Vehicle} from "./types";
 
-// The rest of the code remains unchanged
 
-function MyApp({Component, pageProps}: AppProps) {
-  return <Component {...pageProps} />
+const MyApp = ({Component, pageProps}: AppProps) => {
+  const [selectedCar, setSelectedCar] = useState<Vehicle | null>(null);
+
+  return (
+    <CarContext.Provider value={{selectedCar, setSelectedCar}}>
+      <Component {...pageProps} />
+    </CarContext.Provider>
+  );
 }
 
 export default MyApp
